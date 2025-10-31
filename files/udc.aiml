@@ -1,7 +1,238 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<aiml>
+<aiml version="2.0">
+
+  <!-- ========= START / RESTART ========= -->
+  <category>
+    <pattern>QUIZ</pattern>
+    <template>
+      🎮 Welcome to the CSR Quiz!<br/>
+      5 questions • multiple choice (A/B/C) • +1 point per correct answer.<br/>
+      Type <b>START</b> when you're ready.
+    </template>
+  </category>
+
+  <category>
+    <pattern>START</pattern>
+    <template>
+      <think>
+        <set name="quiz_step">1</set>
+        <set name="score">0</set>
+        <set name="streak">0</set>
+      </think>
+      ✅ Game on! Answer with A, B, or C.<br/><br/>
+      <!-- Q1 -->
+      <b>Q1. What does CSR mean?</b><br/>
+      A) Corporate Social Responsibility<br/>
+      B) Customer Service Relations<br/>
+      C) Corporate Sales Revenue
+    </template>
+  </category>
+
+  <!-- ========= GLOBAL INPUT HANDLER (case-insensitive, tolerant) ========= -->
   <category>
     <pattern>*</pattern>
-    <template>I have no answer for that.</template>
+    <template>
+      <!-- normalize -->
+      <think><set name="reply"><lowercase><star/></lowercase></set></think>
+
+      <condition name="quiz_step">
+
+        <!-- ================= Q1 ================= -->
+        <li value="1">
+          <condition>
+            <!-- Accept A / variations / keywords -->
+            <li value="a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct! +1 point. 🔥 Streak: <get name="streak"/>
+            </li>
+            <li value="a)">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="(a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="option a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="*corporate social responsibility*">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li>
+              ❌ Oops. The correct answer was <b>A) Corporate Social Responsibility</b>.
+              <think><set name="streak">0</set></think>
+            </li>
+          </condition>
+          <think><set name="quiz_step">2</set></think>
+          <br/><b>Q2. What are the 3 Ps?</b><br/>
+          A) Profit, People, Planet<br/>
+          B) Product, Price, Place<br/>
+          C) Policy, Process, Project
+        </li>
+
+        <!-- ================= Q2 ================= -->
+        <li value="2">
+          <condition>
+            <li value="a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct! +1 point. 🔥 Streak: <get name="streak"/>
+            </li>
+            <li value="a)">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="(a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="option a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="*profit*people*planet*">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li>
+              ❌ Not quite. Correct: <b>A) Profit, People, Planet</b>.
+              <think><set name="streak">0</set></think>
+            </li>
+          </condition>
+          <think><set name="quiz_step">3</set></think>
+          <br/><b>Q3. Which set lists the 4 CSR topics?</b><br/>
+          A) Economic, Environmental, Social, Ethical<br/>
+          B) Financial, Legal, Technical, Cultural<br/>
+          C) Marketing, Operations, HR, IT
+        </li>
+
+        <!-- ================= Q3 ================= -->
+        <li value="3">
+          <condition>
+            <li value="a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="a)">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="(a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="option a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="*economic*environmental*social*ethical*">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li>
+              ❌ Nope. Correct: <b>A) Economic, Environmental, Social, Ethical</b>.
+              <think><set name="streak">0</set></think>
+            </li>
+          </condition>
+          <think><set name="quiz_step">4</set></think>
+          <br/><b>Q4. Environmental topics in CSR include…</b><br/>
+          A) Carbon footprint, recycling, renewable energy<br/>
+          B) Tax compliance, audits, budgeting<br/>
+          C) Job rotation, training, benefits
+        </li>
+
+        <!-- ================= Q4 ================= -->
+        <li value="4">
+          <condition>
+            <li value="a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="a)">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="(a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="option a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="*carbon footprint*recycl*renewable energy*">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li>
+              ❌ Incorrect. Correct: <b>A) Carbon footprint, recycling, renewable energy</b>.
+              <think><set name="streak">0</set></think>
+            </li>
+          </condition>
+          <think><set name="quiz_step">5</set></think>
+          <br/><b>Q5. Which of the following is a <i>Social</i> topic in CSR?</b><br/>
+          A) Fair labour<br/>
+          B) Interest rates<br/>
+          C) Market share
+        </li>
+
+        <!-- ================= Q5 ================= -->
+        <li value="5">
+          <condition>
+            <li value="a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="a)">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="(a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="option a">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <!-- also accept keyword answers for tolerance -->
+            <li value="*fair*labour*">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="*health*and*safety*">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li value="*diversity*inclusion*">
+              <think><set name="score"><get name="score"/>1</set><set name="streak"><get name="streak"/>1</set></think>
+              ✅ Correct!
+            </li>
+            <li>
+              ❌ Not this time. Correct example: <b>A) Fair labour</b>.
+              <think><set name="streak">0</set></think>
+            </li>
+          </condition>
+
+          <!-- END & summary -->
+          <think><set name="quiz_step">0</set></think>
+          <br/>🏁 <b>Quiz complete!</b><br/>
+          Score: <b><get name="score"/>/5</b> • Best streak this run: <get name="streak"/> 🔥<br/>
+          Type <b>START</b> to play again.
+        </li>
+
+      </condition>
+    </template>
   </category>
+
+  <!-- ========= SAFETY / IDLE PROMPT ========= -->
+  <category>
+    <pattern>*</pattern>
+    <that>Type &lt;b&gt;START&lt;/b&gt; when you're ready.</that>
+    <template>Say <b>START</b> when you're ready to begin the quiz! 🎯</template>
+  </category>
+
 </aiml>
+

@@ -1,0 +1,230 @@
+
+<button>
+    <text></text>
+    <url></url>
+</button>
+<button>
+    <text></text>
+    <url></url>
+</button><?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+  <!-- =========================
+       Helpers to manage numbers
+       ========================= -->
+  <!-- Increment SCORE safely (0..5) -->
+  <category>
+    <pattern>INC_SCORE</pattern>
+    <template>
+      <condition name="score">
+        <li value="0"><set name="score">1</set></li>
+        <li value="1"><set name="score">2</set></li>
+        <li value="2"><set name="score">3</set></li>
+        <li value="3"><set name="score">4</set></li>
+        <li value="4"><set name="score">5</set></li>
+        <li><set name="score">1</set></li>
+      </condition>
+    </template>
+  </category>
+
+  <!-- Increment STREAK safely (0..5) -->
+  <category>
+    <pattern>INC_STREAK</pattern>
+    <template>
+      <condition name="streak">
+        <li value="0"><set name="streak">1</set></li>
+        <li value="1"><set name="streak">2</set></li>
+        <li value="2"><set name="streak">3</set></li>
+        <li value="3"><set name="streak">4</set></li>
+        <li value="4"><set name="streak">5</set></li>
+        <li><set name="streak">1</set></li>
+      </condition>
+    </template>
+  </category>
+
+  <!-- Reset STREAK -->
+  <category>
+    <pattern>RESET_STREAK</pattern>
+    <template><set name="streak">0</set></template>
+  </category>
+
+  <!-- =========================
+       Start / Restart
+       ========================= -->
+  <category>
+    <pattern>QUIZ</pattern>
+    <template>
+      Welcome to the CSR Quiz.
+      There are 5 questions with multiple choice answers A, B, or C.
+      Type START to begin.
+    </template>
+  </category>
+
+  <category>
+    <pattern>START</pattern>
+    <template>
+      <think>
+        <set name="quiz_step">1</set>
+        <set name="score">0</set>
+        <set name="streak">0</set>
+      </think>
+      Game on. Answer with A, B, or C.
+      Q1. What does CSR mean?
+      A) Corporate Social Responsibility
+      B) Customer Service Relations
+      C) Corporate Sales Revenue
+    </template>
+  </category>
+
+  <!-- =========================
+       Global input handler
+       ========================= -->
+  <category>
+    <pattern>*</pattern>
+    <template>
+      <think><set name="reply"><lowercase><star/></lowercase></set></think>
+
+      <condition name="quiz_step">
+
+        <!-- ===== Q1 ===== -->
+        <li value="1">
+          <condition name="reply">
+            <!-- Accept A and tolerant variants / keywords -->
+            <li value="a">
+              <think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>
+              Correct.
+            </li>
+            <li value="a)">
+              <think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>
+              Correct.
+            </li>
+            <li value="(a">
+              <think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>
+              Correct.
+            </li>
+            <li value="option a">
+              <think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>
+              Correct.
+            </li>
+            <li value="*corporate social responsibility*">
+              <think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>
+              Correct.
+            </li>
+            <li>
+              Not correct. The right answer is A) Corporate Social Responsibility.
+              <think><srai>RESET_STREAK</srai></think>
+            </li>
+          </condition>
+          <think><set name="quiz_step">2</set></think>
+          Q2. What are the 3 Ps?
+          A) Profit, People, Planet
+          B) Product, Price, Place
+          C) Policy, Process, Project
+        </li>
+
+        <!-- ===== Q2 ===== -->
+        <li value="2">
+          <condition name="reply">
+            <li value="a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="a)"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="(a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="option a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="*profit*people*planet*"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li>
+              Not correct. The right answer is A) Profit, People, Planet.
+              <think><srai>RESET_STREAK</srai></think>
+            </li>
+          </condition>
+          <think><set name="quiz_step">3</set></think>
+          Q3. Which set lists the 4 CSR topics?
+          A) Economic, Environmental, Social, Ethical
+          B) Financial, Legal, Technical, Cultural
+          C) Marketing, Operations, HR, IT
+        </li>
+
+        <!-- ===== Q3 ===== -->
+        <li value="3">
+          <condition name="reply">
+            <li value="a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="a)"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="(a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="option a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="*economic*environmental*social*ethical*"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li>
+              Not correct. The right answer is A) Economic, Environmental, Social, Ethical.
+              <think><srai>RESET_STREAK</srai></think>
+            </li>
+          </condition>
+          <think><set name="quiz_step">4</set></think>
+          Q4. Environmental topics in CSR include:
+          A) Carbon footprint, recycling, renewable energy
+          B) Tax compliance, audits, budgeting
+          C) Job rotation, training, benefits
+        </li>
+
+        <!-- ===== Q4 ===== -->
+        <li value="4">
+          <condition name="reply">
+            <li value="a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="a)"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="(a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="option a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="*carbon footprint*recycl*renewable energy*"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li>
+              Not correct. The right answer is A) Carbon footprint, recycling, renewable energy.
+              <think><srai>RESET_STREAK</srai></think>
+            </li>
+          </condition>
+          <think><set name="quiz_step">5</set></think>
+          Q5. Which of the following is a Social topic in CSR?
+          A) Fair labour
+          B) Interest rates
+          C) Market share
+        </li>
+
+        <!-- ===== Q5 ===== -->
+        <li value="5">
+          <condition name="reply">
+            <li value="a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="a)"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="(a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="option a"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <!-- Accept keyword answers too -->
+            <li value="*fair*labour*"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="*health*and*safety*"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li value="*diversity*inclusion*"><think><srai>INC_SCORE</srai><srai>INC_STREAK</srai></think>Correct.</li>
+            <li>
+              Not correct. Example of a correct answer: A) Fair labour.
+              <think><srai>RESET_STREAK</srai></think>
+            </li>
+          </condition>
+
+          <!-- End and summary -->
+          <think><set name="quiz_step">0</set></think>
+          Quiz finished.
+          Your score is <get name="score"/> out of 5.
+          Best streak this run is <get name="streak"/>.
+          Type START to play again.
+        </li>
+
+      </condition>
+    </template>
+  </category>
+
+  <!-- Gentle nudge when not in quiz flow -->
+  <category>
+    <pattern>*</pattern>
+    <that>Type START to begin.</that>
+    <template>Say START to begin the CSR quiz.</template>
+  </category>
+
+<category>
+    <pattern></pattern>
+    <template></template>
+</category>
+<category>
+    <pattern>Click node to edit pattern</pattern>
+    <template>Click node to edit template</template>
+</category>
+</aiml>
+
